@@ -15,9 +15,10 @@ WORKDIR /app
 COPY . .
 
 RUN composer install
-RUN ln -s settings.php sites/default/settings.php
+RUN ln -s web/index.php index.php
+RUN ln -s settings.php web/sites/default/settings.php
 
 #mount the file system here
 RUN mkdir -p /drupal-files/public /drupal-files/private
-RUN ln -s /drupal-files/public sites/default/files
+RUN ln -s /drupal-files/public web/sites/default/files
 RUN chown -R www-data:www-data /drupal-files
