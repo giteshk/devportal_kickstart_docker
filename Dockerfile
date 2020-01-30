@@ -16,7 +16,7 @@ COPY . .
 
 RUN composer install
 RUN ln -s web/index.php index.php
-RUN ln -s settings.php web/sites/default/settings.php
+RUN mv -f settings.php web/sites/default/settings.php
 
 #mount the file system here
 RUN mkdir -p /drupal-files/public /drupal-files/private
