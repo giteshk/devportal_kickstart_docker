@@ -25,4 +25,9 @@ RUN mv -f settings.php web/sites/default/settings.php
 #mount the file system here
 RUN ln -s /drupal-files/public web/sites/default/files
 
-RUN chown -R www-data.www-data /drupal-files && chmod -R 775 /drupal-files
+RUN chown -R www-data.www-data /app/web/sites/default/settings.php \
+    && chmod -R 775 /app/web/sites/default/settings.php
+RUN chown -R www-data.www-data /drupal-files/private \
+    && chmod -R 775 /drupal-files/private
+RUN chown -R www-data.www-data /drupal-files/public \
+    && chmod -R 775 /drupal-files/public
