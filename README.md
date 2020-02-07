@@ -32,6 +32,47 @@ You can download this project and add the files to your project to build docker 
     ```    
 - cloudbuild.xml - Copy this file if you plan to use [Cloud Build](https://cloud.google.com/cloud-build/docs/)
 
+## Building this docker image locally
+To build the docker image on your instance run the following:
+    
+    docker build -t devportal/kickstart .
+
+## Running this setup locally
+1. Create a volume for the drupal files
+    ```
+        docker volume create dev-public-files
+        docker volume create dev-private-files
+    ```
+2.  Create a mariadb database.
+    You can setup the mariadb docker container as shown below:
+    ```
+        docker pull mariadb
+    
+        docker run --name=dev-db \
+            -e MYSQL_ROOT_PASSWORD=rootpassword \
+            -e MYSQL_DATABASE=drupal_db \
+            -e MYSQL_USER=dbuser \
+            -e MYSQL_PASSWORD=passw0rd \
+            -p3306:3306 mariadb
+    ```    
+3. Update the MYSQL_DB_HOST with the IP Address the environment.txt file. Now run the image you just built
+    ```
+    docker run -v dev-public-files:/drupal-files/public \
+        -v dev-private-files:/drupal-files/private \
+        --name=dev-drupal  \
+        --env-file=./environment.txt \
+        -p3000:80 devportal/kickstart:latest 
+    ```
+4. Open a browser and go to [http://localhost:3000](http://localhost:3000)
+
+## Remove your docker containers
+
+    docker stop dev-drupal
+    docker container rm dev-drupal 
+    docker stop dev-db
+    docker container rm dev-db 
+    docker volume rm dev-public-files 
+    docker volume rm dev-private-files
 
 ## Implementation details
 
