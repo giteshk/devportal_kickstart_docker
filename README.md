@@ -1,41 +1,12 @@
 # Drupal 8 docker image for GCP
 
-This project is a reference for how to build a Drupal 8 docker image to be deployed on GCP.
+This project is a reference for how to build a Drupal 8 docker image to be deployed on Google Cloud Platform.
 
-You can download this project and add the files to your project to build docker image
+If you want to use this image you can download it from docker hub
 
+    docker pull giteshk/devportal_kickstart_docker
 
-## Copy the below files to your project to build your docker image
-- Dockerfile
-- nginx-http.conf
-- php.ini
-- settings.php
-- Public files for drupal need to be mounted at /drupal-files/public
-- Private files for drupal need to be mounted at /drupal-files/private
-- Make sure that you have the following dependencies in your composer.json
-  You will need to specify the php version.
-    ``` 
-        "ext-date": "*",
-        "ext-dom": "*",
-        "ext-filter": "*",
-        "ext-gd": "*",
-        "ext-hash": "*",
-        "ext-json": "*",
-        "ext-pcre": "*",
-        "ext-pdo": "*",
-        "ext-session": "*",
-        "ext-simplexml": "*",
-        "ext-spl": "*",
-        "ext-tokenizer": "*",
-        "ext-xml": "*",
-        "php": ">=7.2.0"
-    ```    
-- cloudbuild.xml - Copy this file if you plan to use [Cloud Build](https://cloud.google.com/cloud-build/docs/)
-
-## Building this docker image locally
-To build the docker image on your instance run the following:
-    
-    docker build -t devportal/kickstart .
+If you would like to build your own container follow the instructions [below](#Want-to-build-your-own-docker-image)
 
 ## Running this setup locally
 1. Create a volume for the drupal files
@@ -61,7 +32,7 @@ To build the docker image on your instance run the following:
         -v dev-private-files:/drupal-files/private \
         --name=dev-drupal  \
         --env-file=./environment.txt \
-        -p3000:80 devportal/kickstart:latest 
+        -p3000:80 giteshk/devportal_kickstart_docker:latest 
     ```
 4. Open a browser and go to [http://localhost:3000](http://localhost:3000)
 
@@ -74,11 +45,45 @@ To build the docker image on your instance run the following:
     docker volume rm dev-public-files 
     docker volume rm dev-private-files
 
+##Want to build your own docker image
+If you want to build your own Drupal 8 project copy the files listed below to your project :
+- Dockerfile
+- nginx-http.conf
+- php.ini
+- settings.php
+- Make sure that you have the following dependencies in your composer.json
+  You will need to specify the php version.
+    ``` 
+        "ext-date": "*",
+        "ext-dom": "*",
+        "ext-filter": "*",
+        "ext-gd": "*",
+        "ext-hash": "*",
+        "ext-json": "*",
+        "ext-pcre": "*",
+        "ext-pdo": "*",
+        "ext-session": "*",
+        "ext-simplexml": "*",
+        "ext-spl": "*",
+        "ext-tokenizer": "*",
+        "ext-xml": "*",
+        "php": ">=7.2.0"
+    ```    
+- cloudbuild.xml - Copy this file if you plan to use [Cloud Build](https://cloud.google.com/cloud-build/docs/)
+
+
+## Building this docker image locally
+To build the docker image on your instance run the following:
+    
+    docker build -t my-drupal8 .
+
+Follow the instructions above to run this container
+
 ## Implementation details
 
 ### Dockerfile
     We based this image on the PHP Google App Engine image. 
-    We did to leverage all security patches that this image would get from Google team.
+    We did to leverage all security patches that App Engine image would get from Google team.
     ***As of the writing of this project App Engine image only supports php 7.1 and 7.2***
 ### nginx-http.conf
     The default nginx configuration is not Drupal friendly so we took the nginx Drupal
